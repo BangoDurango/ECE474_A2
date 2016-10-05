@@ -14,28 +14,21 @@ int main (int argc, char* argv[]){
 	
 	if (argc != 3) {
 		std::cout << "Incorrect number of arguments." << std::endl;
-		return 0;
+		//return 0;
 	}
-	std::cout << argv[0] << std::endl;
 
-	Parser testParser(argv[1], "ignore");
-	V_Pin testVPin("a", "input", "Int32");
-
-	//newParser.PrintLines();
-	//newParser.setFileName();
-
-	//ifstream inFile(argv[1]);
 	
-	//string line;
 
-	//if (inFile.is_open() && inFile.good()) std::cout << "File Opened!" << std::endl;
+	//std::cout << argv[0] << std::endl;
+	V_Module VMod;
+	//VMod.setFileStrings(Parser::parseFile(argv[0]));
+	Parser::parseFile(argv[1], VMod.getFileStringVector());
 
-	//while (getline(inFile, line)) {
-	//	std::cout << line << std::endl;
-	//}
+	VMod.generatePins();
+
+	VMod.printLines();
 
 
-	//inFile.close();
 
 	return 0;
 }

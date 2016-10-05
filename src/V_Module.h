@@ -14,13 +14,25 @@ File: V_Module.h
 #include<iostream>
 #include <sstream>
 #include "V_Pin.h"
+#include "Parser.h"
 
 class V_Module {
 
 public:
+	//~V_Module();//to delete strings
+
+	//void getPinsByName(std::string s);
+	void addPin(std::string sName, std::string sType, std::string sbitWidth);
+	void printLines(void);
+//	void setupPins();
+	void setFileStrings(std::vector<string> lines);
+	std::vector<string>* getFileStringVector();
+	
+	void generatePins();
 
 private:
 	std::vector<V_Pin> pins;
+	std::vector<string> rawFileStrings;
 
 };
 
