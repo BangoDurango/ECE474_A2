@@ -15,6 +15,7 @@ File: Parser.h
 #include <iostream>
 #include <fstream>
 #//include<boost/tokenizer.hpp>
+//#include "V_Module.h"
 
 using namespace std;
 //using namespace boost;
@@ -24,22 +25,30 @@ class Parser {
 public:
 
 	//Parser(void);
-	Parser(std::string inFileArg, std::string outFileArg);
+	//Parser(std::string inFileArg);
 //	~Parser(void);
-	void PrintLines(void);
 
+	static void parseFile(std::string inFileStr, std::vector<string>* lines);
+
+	//void setVMod(V_Module* VM);
+	static vector<std::string> splitByWhitespace(std::string line);
+	//void printLines(void);
+
+	//void parseToVMod(V_Module* VM);
 	//void setFileName();
 
 private:
-	std::ifstream inFile;
-	std::ofstream outFile;
+	//V_Module* VMod;
 
-	std::string inFilePath;
-	std::string outFilePath;
+	//std::ifstream inFile;
+	//std::ofstream outFile;
+
+	//std::string inFilePath;
+	//std::string outFilePath;
 
 	//std::string fileName;
 	//std::string filePath;
-	std::vector<std::string> lines;
+	//std::vector<std::string> lines;
 
 
 };
