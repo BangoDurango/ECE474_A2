@@ -20,13 +20,17 @@ using namespace std;
 class V_Pin {
 
 public:
-	std::string getName(void);
-	std::string getType(void);
+
 	//V_Pin(std::string line);
 	V_Pin();
 	V_Pin(std::string sName, std::string sType, std::string sBitWidthString);
 
+	std::string getName(void);
+	std::string getType(void);
+	unsigned int getBitWidth(void);
+	void printPin();
 	static bool CheckType(std::string);
+	
 private:
 
 	//const std::vector<std::string> types = { "input", "output", "wire" };

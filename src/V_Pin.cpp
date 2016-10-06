@@ -22,10 +22,11 @@ V_Pin::V_Pin(std::string sName, std::string sType, std::string sBitWidthString) 
 
 }
 V_Pin::V_Pin() {
+	//default constructor
 	type = "invalid";
 }
 bool V_Pin::CheckType(std::string sType) {
-
+	//This function verifies that the string is a type input or output etc
 	bool flag = false;
 
 	if (sType == "input") flag = true;
@@ -34,21 +35,14 @@ bool V_Pin::CheckType(std::string sType) {
 	else if (sType == "register") flag = true;
 	return flag;
 }
-//V_Pin::V_Pin(std::string line) {
-//	//std::vector<string> tok;
-//	//std::string sName;
-//	//std::string sType;
-//	//std::string sBitWidthString;
-//
-//	//tok = Parser::splitByWhitespace(line);
-//
-//	//sType = tok.at(0);
-//	//sBitWidthString = tok.at(1);
-//
-//	//for (std::vector<string>::iterator it = tok.at(2); it != tok.end(); ++it) {
-//	//	
-//	//}
-//}
+
+
 
 std::string V_Pin::getName(void) { return name; }
 std::string V_Pin::getType(void) { return type; }
+unsigned int V_Pin::getBitWidth(void) { return bitWidth;}
+
+void V_Pin::printPin() {
+	std::cout << "Type: " << type << "; Bit Width: " << bitWidth << "; Name: " << name << std::endl;
+}
+

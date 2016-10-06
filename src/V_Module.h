@@ -15,25 +15,30 @@ File: V_Module.h
 #include <sstream>
 #include "V_Pin.h"
 #include "Parser.h"
+#include "V_Component.h"
 
 class V_Module {
 
 public:
-	//~V_Module();//to delete strings
-
-	//void getPinsByName(std::string s);
-	void addPin(std::string sName, std::string sType, std::string sbitWidth);
-	void printLines(void);
-//	void setupPins();
-	void setFileStrings(std::vector<string> lines);
-	std::vector<string>* getFileStringVector();
+	~V_Module();//to delete strings
 	
-	void generatePins();
+//	void addPin(std::string sName, std::string sType, std::string sbitWidth);
+	void printLines(void);
+
+	
+	void generatePins();//Uses the lines from the text file to generate a vector of V_Pin objects
+	void generateComponents();//For Luis - see end of V_Module.cpp
+	
+	std::vector<string>* getFileStringVector();
+	//V_Pin* getPinByName(std::string sName);
 
 private:
-	std::vector<V_Pin> pins;
+	std::vector<V_Pin*> pins;
+	std::vector<V_Component*> comps;
 	std::vector<string> rawFileStrings;
-
+	std::vector<string>::iterator MOF; //MOF stands for Middle of File - the generatePins() function sets this at the 
+	//when it has reached the end of the input/output declarations, so the generateComponents() can start from this point
+	V_Pin* getPinByName(std::string sName);
 };
 
 

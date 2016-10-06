@@ -3,7 +3,7 @@
 #include <sstream>
 #include <cstdlib>
 #include <fstream>
-#include "parser.h"
+#include "Parser.h"
 #include "V_Module.h"
 #include "V_Pin.h"
 
@@ -17,16 +17,17 @@ int main (int argc, char* argv[]){
 		//return 0;
 	}
 
-	
-
 	//std::cout << argv[0] << std::endl;
 	V_Module VMod;
-	//VMod.setFileStrings(Parser::parseFile(argv[0]));
+
 	Parser::parseFile(argv[1], VMod.getFileStringVector());
+	//Static Parser class reads each line of the file in to VMod member rawFileStrings
 
 	VMod.generatePins();
 
-	VMod.printLines();
+	//std::cout << "testing getPinByName(): " << VMod.getPinByName("a")->getType() << std::endl;
+	VMod.generateComponents();
+	//VMod.printLines();
 
 
 
