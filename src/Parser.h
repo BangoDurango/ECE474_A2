@@ -14,34 +14,17 @@ File: Parser.h
 #include<vector>
 #include <iostream>
 #include <fstream>
-#//include<boost/tokenizer.hpp>
+#include <algorithm>
+//#include "V_Module.h"
 
 using namespace std;
-//using namespace boost;
 
 class Parser {
 
 public:
 
-	//Parser(void);
-	Parser(std::string inFileArg, std::string outFileArg);
-//	~Parser(void);
-	void PrintLines(void);
-
-	//void setFileName();
-
-private:
-	std::ifstream inFile;
-	std::ofstream outFile;
-
-	std::string inFilePath;
-	std::string outFilePath;
-
-	//std::string fileName;
-	//std::string filePath;
-	std::vector<std::string> lines;
-
-
+	static void parseFile(std::string inFileStr, std::vector<string>* lines);
+	static vector<std::string> splitByWhitespace(std::string line);
 };
 
 #endif //PARSER_H

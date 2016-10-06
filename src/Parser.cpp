@@ -2,45 +2,57 @@
 #include "Parser.h"
 
 
-Parser::Parser(std::string inFileArg, std::string outFileArg) {
+void Parser::parseFile(std::string inFileStr, std::vector<string> *destVector) {
 	std::string line;
-	inFilePath = inFileArg;
-	outFilePath = outFileArg;
+	std::ifstream inFile;
 
-//	std::cout << inFilePath << std::endl;
+	inFile = std::ifstream(inFileStr.c_str());
+	//outFile = std::ofstream(outFilePath);
+	std::cout << inFileStr << std::endl;
 
-	inFile = std::ifstream(inFilePath);
-	outFile = std::ofstream(outFilePath);
-	//setFileName();
-
-	if (inFile.is_open() && inFile.good() && outFile.is_open() && outFile.good()) {
-		//std::cout << "File Opened!" << std::endl;
+	//&& outFile.is_open() && outFile.good()
+	if (inFile.is_open() && inFile.good()) {
+	//	std::cout << "File Opened!" << std::endl;
 	}
-	else {	
+	else {
 		std::cout << "File(s) not opened." << std::endl;
-		return;
+		//return std::vector<std::string>();
 	}
 
 	//std::cout << "Inside constructor" << std::endl;
+	//fstream::getline()
+	//line = new std::string;
+	while (std::getline(inFile, line)) {
+	//	std::cout << line << std::endl;
+		if (line != "") {
+			destVector->push_back(line);
+		}
+		//push_back(line);
 
-	while (getline(inFile, line)) {
-		//std::cout << line << std::endl;
-		lines.push_back(line);
 	}
 
-	
+
 	inFile.close();
 
-	outFile.flush();
-	outFile.close();
-	return;
-
+	//outFile.flush();
+	//outFile.close();
+	//return  lines;
 }
 
-void Parser::PrintLines(void) {
-	for (vector<string>::iterator it = lines.begin(); it != lines.end(); ++it) {
-		std::cout << *it << std::endl;
+vector<std::string> Parser::splitByWhitespace(std::string str) {
+
+	string buf; // Have a buffer string
+	stringstream ss(str); // Insert the string into a stream
+
+	vector<string> tokens; // Create vector to hold our words
+
+	while (ss >> buf) {
+		buf.erase(std::remove(buf.begin(), buf.end(), ','), buf.end());
+		tokens.push_back(buf);
+	//	std::cout << buf << std::endl;
 	}
+	return tokens;
+
 }
 
 //void Parser::setFileName() {
