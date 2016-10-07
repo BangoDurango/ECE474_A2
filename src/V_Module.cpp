@@ -89,12 +89,65 @@ void V_Module::generateComponents() {
 	//Similar to generatePins() but creates a vector of v_components
 	V_Component* newComp;
 	newComp = NULL;
-
+	std::vector<string> tok; //Stores the tokenized string
+	std::string outputPin; //Stores the output pin string
+	std::string input1Pin; //Stores the 1st input pin string
+	std::string input2Pin; //Stores the 2nd input pin in string
+	std::string operation; //Stores the operator
+	//testing
+	V_Pin* pin1;
+	
 	//Note: you can use the private method getPinByName() to pass input/output pointers to the componnent constructor...
 	//for example, let's say you have string variables called input1 and input2 and output, and they have an "a", "b", and "x" in them...
 	//you can say  newComp = new V_Component(getPinByName(input1), getPinByName(input2), getPinByName(output))
 
 	for (std::vector<string>::iterator it = MOF; it != rawFileStrings.end(); it++) {
-		//This will loop through the remaining strings which were not input/output/wire strings etc.
+		//tokenizes string
+		tok = Parser::splitByWhitespace(*it);
+		int size = tok.size();
+
+		//1st letter should be the output
+		outputPin = tok.at(0);
+		//checks to see if pin name is stored
+		pin1= getPinByName(outputPin);
+		//Error is thrown if pin cannot be found
+		if (pin1 == NULL){
+			//FIXME: check if it is a wire or output and not an input
+			std::cout << "File Read Error: generateComponent() function" << std::endl;
+		}
+
+		input1Pin = tok.at(2);
+		//checks to see if pin name is stored
+		pin1 = getPinByName(input1Pin);
+		if (pin1 == NULL){
+			//FIXME: check if it is a wire or output and not an input
+			std::cout << "File Read Error: generateComponent() function" << std::endl;
+		}
+
+		operation = tok.at(3);
+
+		input2Pin = tok.at(4);
+		//checks to see if pin name is stored
+		pin1 = getPinByName(input1Pin);
+		if (pin1 == NULL){
+			//FIXME: check if it is a wire or output and not an input
+			std::cout << "File Read Error: generateComponent() function" << std::endl;
+		}
+
+		//testing
+		std::cout << "input1: " << input1Pin << std::endl;
+		std::cout << "input2: " << input2Pin << std::endl;
+		std::cout << "comp: " << operation << std::endl;
+		std::cout << "output: " << outputPin << std::endl;
+
+		newComp = new V_Component(getPinByName(input1Pin), getPinByName(input2Pin), getPinByName(outputPin), operation);
+
+		comps.push_back(newComp);
+		
+		//for (int i = 0; i < 3; i++){
+		//	std::cout << tok.at(i) << std::endl;
+		//}
+		std::cout << std::endl;
+
 	}
 }
