@@ -16,17 +16,22 @@ class V_Component {
 public:
 //	V_Component();
 
-	V_Component(V_Pin* In1, V_Pin* In2, V_Pin* Output, std::string Operation);//In addition to setting the pin pointers, you can probably just put the verilog string together in here?
+	V_Component(V_Pin* In1, V_Pin* In2, V_Pin* Output, std::string Operation, int componentNumber);//In addition to setting the pin pointers, you can probably just put the verilog string together in here?
+	V_Component(V_Pin* In1, V_Pin* Output, int ComponentNumber); //extra constructor for REG component
+	V_Component(V_Pin* In1, V_Pin* In2, V_Pin* Control, V_Pin* Output, int ComponentNumber);//extra constructor for MUX component
 	//std::string getVerilogString();//
 
+	std::string V_Component::buildVerilogString();
 
 private:
 
+	int componentNumber;
 	std::string name;
 	std::string type;//We can create a different class for each type of componenet if we need to? I don't know if that's necessary, your call.
 	std::string operation;
 	V_Pin* in1;
 	V_Pin* in2;
+	V_Pin* control;
 	V_Pin* output;
 
 	std::string verilogString;

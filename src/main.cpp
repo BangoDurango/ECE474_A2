@@ -26,7 +26,7 @@ int main (int argc, char* argv[]){
 	vmod.generatePins();
 	
 	vmod.generateComponents();
-	vmod.printLines();
+	//vmod.printLines();
 
 
 

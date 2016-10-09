@@ -87,8 +87,9 @@ V_Pin* V_Module::getPinByName(std::string sName) {
 
 void V_Module::generateComponents() {
 	//Similar to generatePins() but creates a vector of v_components
-	V_Component* newComp;
-	newComp = NULL;
+	int componentNumber = 1; //store the number of component (used for distinguish multipil)
+	V_Component* newComp; //stores new component pointer
+	newComp = NULL; //initializes pointer to null everytime function is called
 	std::vector<string> tok; //Stores the tokenized string
 	std::string outputPin; //Stores the output pin string
 	std::string input1Pin; //Stores the 1st input pin string
@@ -104,46 +105,146 @@ void V_Module::generateComponents() {
 	for (std::vector<string>::iterator it = MOF; it != rawFileStrings.end(); it++) {
 		//tokenizes string
 		tok = Parser::splitByWhitespace(*it);
+		//checks for size
 		int size = tok.size();
 
-		//1st letter should be the output
-		outputPin = tok.at(0);
-		//checks to see if pin name is stored
-		pin1= getPinByName(outputPin);
-		//Error is thrown if pin cannot be found
-		if (pin1 == NULL){
-			//FIXME: check if it is a wire or output and not an input
-			std::cout << "File Read Error: generateComponent() function" << std::endl;
+		if (size == 3){
+			outputPin = tok.at(0);
+			//checks to see if pin name is stored
+			pin1 = getPinByName(outputPin);
+			//Error is thrown if pin cannot be found
+			if (pin1 == NULL){
+				std::cout << "File Read Error: generateComponent() function" << std::endl;
+				exit(1); //error end program
+			}
+
+			if (tok.at(1) != "="){
+				std::cout << "File Read Error: generateComponent() function" << std::endl;
+				exit(1); //error end program
+			}
+
+			input1Pin = tok.at(2);
+			//checks to see if pin name is stored
+			pin1 = getPinByName(input1Pin);
+			if (pin1 == NULL){
+				std::cout << "File Read Error: generateComponent() function" << std::endl;
+				exit(1); //error end program
+			}
+
+			newComp = new V_Component(getPinByName(input1Pin), getPinByName(outputPin), componentNumber);
+
 		}
 
-		input1Pin = tok.at(2);
-		//checks to see if pin name is stored
-		pin1 = getPinByName(input1Pin);
-		if (pin1 == NULL){
-			//FIXME: check if it is a wire or output and not an input
-			std::cout << "File Read Error: generateComponent() function" << std::endl;
+		//1 ouput; 1 equalSign; 2 inputs; 1 operator
+		if (size == 5){
+			//1st letter should be the output
+			outputPin = tok.at(0);
+			//checks to see if pin name is stored
+			pin1 = getPinByName(outputPin);
+			//Error is thrown if pin cannot be found
+			if (pin1 == NULL){
+				std::cout << "File Read Error: generateComponent() function" << std::endl;
+				exit(1); //error end program
+			}
+
+			if (tok.at(1) != "="){
+				std::cout << "File Read Error: generateComponent() function" << std::endl;
+				exit(1); //error end program
+			}
+
+			input1Pin = tok.at(2);
+			//checks to see if pin name is stored
+			pin1 = getPinByName(input1Pin);
+			if (pin1 == NULL){
+				std::cout << "File Read Error: generateComponent() function" << std::endl;
+				exit(1); //error end program
+			}
+
+			operation = tok.at(3);
+
+			input2Pin = tok.at(4);
+			//checks to see if pin name is stored
+			pin1 = getPinByName(input1Pin);
+			if (pin1 == NULL){
+				std::cout << "File Read Error: generateComponent() function" << std::endl;
+				exit(1); //error end program
+			}
+
+			//testing
+			/*
+			std::cout << "input1: " << input1Pin << std::endl;
+			std::cout << "input2: " << input2Pin << std::endl;
+			std::cout << "comp: " << operation << std::endl;
+			std::cout << "output: " << outputPin << std::endl;*/
+
+			//creates component to store in vector
+			newComp = new V_Component(getPinByName(input1Pin), getPinByName(input2Pin), getPinByName(outputPin), operation, componentNumber);
+
 		}
 
-		operation = tok.at(3);
+		if (size == 7){
+			std::string input3Pin;
+			int muxOut = 0;
 
-		input2Pin = tok.at(4);
-		//checks to see if pin name is stored
-		pin1 = getPinByName(input1Pin);
-		if (pin1 == NULL){
-			//FIXME: check if it is a wire or output and not an input
-			std::cout << "File Read Error: generateComponent() function" << std::endl;
+			outputPin = tok.at(0);
+			//checks to see if pin name is stored
+			pin1 = getPinByName(outputPin);
+			//Error is thrown if pin cannot be found
+			if (pin1 == NULL){
+				std::cout << "File Read Error: generateComponent() function" << std::endl;
+				exit(1); //error end program
+			}
+
+			//Checking file format
+			if (tok.at(1) != "="){
+				std::cout << "File Read Error: generateComponent() function" << std::endl;
+				exit(1); //error end program
+			}
+
+			if (tok.at(3) != "?"){
+				std::cout << "File Read Error: generateComponent() function" << std::endl;
+				exit(1); //error end program
+			}
+
+			if (tok.at(5) != ":"){
+				std::cout << "File Read Error: generateComponent() function" << std::endl;
+				exit(1); //error end program
+			}
+
+			input3Pin = tok.at(2);
+			//checks to see if pin name is stored
+			pin1 = getPinByName(input1Pin);
+			if (pin1 == NULL){
+				std::cout << "File Read Error: generateComponent() function" << std::endl;
+				exit(1); //error end program
+			}
+
+			input1Pin = tok.at(4);
+			//checks to see if pin name is stored
+			pin1 = getPinByName(input1Pin);
+			if (pin1 == NULL){
+				std::cout << "File Read Error: generateComponent() function" << std::endl;
+				exit(1); //error end program
+			}
+
+			input2Pin = tok.at(6);
+			//checks to see if pin name is stored
+			pin1 = getPinByName(input1Pin);
+			if (pin1 == NULL){
+				std::cout << "File Read Error: generateComponent() function" << std::endl;
+				exit(1); //error end program
+			}
+
+			
+			newComp = new V_Component(getPinByName(input1Pin), getPinByName(input2Pin), getPinByName(input3Pin), getPinByName(outputPin), componentNumber);
+
+
 		}
 
-		//testing
-		std::cout << "input1: " << input1Pin << std::endl;
-		std::cout << "input2: " << input2Pin << std::endl;
-		std::cout << "comp: " << operation << std::endl;
-		std::cout << "output: " << outputPin << std::endl;
-
-		newComp = new V_Component(getPinByName(input1Pin), getPinByName(input2Pin), getPinByName(outputPin), operation);
-
+		//add to component list
 		comps.push_back(newComp);
-		
+		//updates componentNumber
+		componentNumber = componentNumber + 1;
 		//for (int i = 0; i < 3; i++){
 		//	std::cout << tok.at(i) << std::endl;
 		//}

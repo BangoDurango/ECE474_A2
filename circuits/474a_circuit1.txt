@@ -10,6 +10,8 @@ wire Int16 xwire
 d = a + b
 e = a + c
 g = d > e
+g = d < e
+g = d == e
 z = g ? d : e
 f = a * c
 xwire = f - d  
