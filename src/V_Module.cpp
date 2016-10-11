@@ -95,6 +95,7 @@ void V_Module::generateComponents() {
 	std::string input1Pin; //Stores the 1st input pin string
 	std::string input2Pin; //Stores the 2nd input pin in string
 	std::string operation; //Stores the operator
+	std::string checkString;
 	//testing
 	V_Pin* pin1;
 	
@@ -102,12 +103,36 @@ void V_Module::generateComponents() {
 	//for example, let's say you have string variables called input1 and input2 and output, and they have an "a", "b", and "x" in them...
 	//you can say  newComp = new V_Component(getPinByName(input1), getPinByName(input2), getPinByName(output))
 
+	//Goes through the rest of the file strings 
 	for (std::vector<string>::iterator it = MOF; it != rawFileStrings.end(); it++) {
 		//tokenizes string
 		tok = Parser::splitByWhitespace(*it);
 		//checks for size
 		int size = tok.size();
+		
+		//deletes comments
+		int comment = 0;
+		for (int i = 0; i < size; i++){
+			checkString = tok.at(i);
+			if ((checkString[0] == '/') && (checkString[1] == '/')){
+				while (i < size){
+					tok.pop_back();
+					size = size - 1;
+				}
+			}
+			//	tok.at(i).erase();
+			//	comment = 1;
+			//	size = size - 1;
 
+			//}
+			//else if (comment == 1){
+			//	tok.at(i).erase();
+			//	size = size - 1;
+			//}
+		}
+
+
+		//if size is 3 then the component should be a resister
 		if (size == 3){
 			outputPin = tok.at(0);
 			//checks to see if pin name is stored
@@ -118,21 +143,22 @@ void V_Module::generateComponents() {
 				exit(1); //error end program
 			}
 
+			//Verifies file format 
 			if (tok.at(1) != "="){
 				std::cout << "File Read Error: generateComponent() function" << std::endl;
 				exit(1); //error end program
 			}
 
+			//Stores input to register
 			input1Pin = tok.at(2);
-			//checks to see if pin name is stored
+			//checks to see if pin name is stored/valid
 			pin1 = getPinByName(input1Pin);
 			if (pin1 == NULL){
 				std::cout << "File Read Error: generateComponent() function" << std::endl;
 				exit(1); //error end program
 			}
-
+			//creates the component
 			newComp = new V_Component(getPinByName(input1Pin), getPinByName(outputPin), componentNumber);
-
 		}
 
 		//1 ouput; 1 equalSign; 2 inputs; 1 operator
@@ -147,6 +173,7 @@ void V_Module::generateComponents() {
 				exit(1); //error end program
 			}
 
+			//Verifies file format 
 			if (tok.at(1) != "="){
 				std::cout << "File Read Error: generateComponent() function" << std::endl;
 				exit(1); //error end program
@@ -155,6 +182,7 @@ void V_Module::generateComponents() {
 			input1Pin = tok.at(2);
 			//checks to see if pin name is stored
 			pin1 = getPinByName(input1Pin);
+			//Error is thrown if pin cannot be found
 			if (pin1 == NULL){
 				std::cout << "File Read Error: generateComponent() function" << std::endl;
 				exit(1); //error end program
@@ -165,12 +193,13 @@ void V_Module::generateComponents() {
 			input2Pin = tok.at(4);
 			//checks to see if pin name is stored
 			pin1 = getPinByName(input1Pin);
+			//Error is thrown if pin cannot be found
 			if (pin1 == NULL){
 				std::cout << "File Read Error: generateComponent() function" << std::endl;
 				exit(1); //error end program
 			}
 
-			//testing
+			//FOR TESTING
 			/*
 			std::cout << "input1: " << input1Pin << std::endl;
 			std::cout << "input2: " << input2Pin << std::endl;
@@ -182,10 +211,11 @@ void V_Module::generateComponents() {
 
 		}
 
+		//this creates a MUX given conditional statement
 		if (size == 7){
-			std::string input3Pin;
-			int muxOut = 0;
+			std::string input3Pin;  //Stores the Mux Control
 
+			//stores the output pin
 			outputPin = tok.at(0);
 			//checks to see if pin name is stored
 			pin1 = getPinByName(outputPin);
@@ -201,19 +231,23 @@ void V_Module::generateComponents() {
 				exit(1); //error end program
 			}
 
+			//Checking file format
 			if (tok.at(3) != "?"){
 				std::cout << "File Read Error: generateComponent() function" << std::endl;
 				exit(1); //error end program
 			}
 
+			//Checking file format
 			if (tok.at(5) != ":"){
 				std::cout << "File Read Error: generateComponent() function" << std::endl;
 				exit(1); //error end program
 			}
 
+			//Stores the control for the MUX
 			input3Pin = tok.at(2);
 			//checks to see if pin name is stored
 			pin1 = getPinByName(input1Pin);
+			//Error is thrown if pin cannot be found
 			if (pin1 == NULL){
 				std::cout << "File Read Error: generateComponent() function" << std::endl;
 				exit(1); //error end program
@@ -222,6 +256,7 @@ void V_Module::generateComponents() {
 			input1Pin = tok.at(4);
 			//checks to see if pin name is stored
 			pin1 = getPinByName(input1Pin);
+			//Error is thrown if pin cannot be found
 			if (pin1 == NULL){
 				std::cout << "File Read Error: generateComponent() function" << std::endl;
 				exit(1); //error end program
@@ -230,12 +265,13 @@ void V_Module::generateComponents() {
 			input2Pin = tok.at(6);
 			//checks to see if pin name is stored
 			pin1 = getPinByName(input1Pin);
+			//Error is thrown if pin cannot be found
 			if (pin1 == NULL){
 				std::cout << "File Read Error: generateComponent() function" << std::endl;
 				exit(1); //error end program
 			}
 
-			
+			//creates component to store in vector
 			newComp = new V_Component(getPinByName(input1Pin), getPinByName(input2Pin), getPinByName(input3Pin), getPinByName(outputPin), componentNumber);
 
 
@@ -245,10 +281,8 @@ void V_Module::generateComponents() {
 		comps.push_back(newComp);
 		//updates componentNumber
 		componentNumber = componentNumber + 1;
-		//for (int i = 0; i < 3; i++){
-		//	std::cout << tok.at(i) << std::endl;
-		//}
+		
+		//FOR TESTING
 		std::cout << std::endl;
-
 	}
 }

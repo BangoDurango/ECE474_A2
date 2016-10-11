@@ -6,27 +6,32 @@ V_Component::V_Component(V_Pin* In1, V_Pin* In2, V_Pin* Output, std::string Oper
 	in2 = In2;
 	output = Output;
 	operation = Operation;
-	//verilogString = this->buildVerilogString(in1, in2, output, operation);
 	verilogString = this->buildVerilogString();
 }
 
 V_Component::V_Component(V_Pin* In1, V_Pin* Output, int ComponentNumber){
-	componentNumber = ComponentNumber;
-	in1 = In1;
-	in2 = NULL;
-	output = Output;
-	int maxBitLength = 0;
-	bool equalBits = false;
-	operation = "";
-	std::string extraZeros1 = "";
-	std::string extraZeros1end = "";
+	//This constructor is to create a Register component
+	componentNumber = ComponentNumber; //initializes componentNumber
+	in1 = In1; //initializes in1
+	in2 = NULL; //initializes in2
+	output = Output; //initializes output
+	int maxBitLength = 0; //stores the max bit length
+	bool equalBits = false; //set to true if all inputs/outputs are equal bit length
+	operation = ""; //
+	std::string extraZeros1 = ""; //string for extra zeros if bit length are different
+	std::string extraZeros1end = ""; //for final "}" if need for different bit lengths
 
+	//Checks to see if bit length if different
 	if (in1->getBitWidth()  == output->getBitWidth()){
+		//set bit length - All are equal
 		maxBitLength = in1->getBitWidth();
+		//All variables have same bit length
 		equalBits = true;
 	}
 	else{
+		//variables have different bit length
 		equalBits = false;
+		//sets the max bit length 
 		if (in1->getBitWidth() < output->getBitWidth()){
 			maxBitLength = output->getBitWidth();
 		}
@@ -35,6 +40,7 @@ V_Component::V_Component(V_Pin* In1, V_Pin* Output, int ComponentNumber){
 		}
 	}
 
+	//if bit length are different zero are added in front of the variable to match the max bit length
 	if (equalBits == false){
 		int bitDiff = 0;
 		if (in1->getBitWidth() != maxBitLength){
@@ -48,7 +54,9 @@ V_Component::V_Component(V_Pin* In1, V_Pin* Output, int ComponentNumber){
 		}
 	}
 
+	//creates verilog string for REG component
 	verilogString = "REG #(" + to_string(maxBitLength) + ") REG_" + to_string(componentNumber) + "(" + extraZeros1 + in1->getName() + extraZeros1end + "," + output->getName() + ",Clk,Rst)";
+	//FOR TESTING
 	std::cout << verilogString << std::endl;
 }
 
@@ -113,7 +121,7 @@ V_Component::V_Component(V_Pin* In1, V_Pin* In2, V_Pin* Control, V_Pin* Output, 
 
 }
 
-//std::string V_Component::buildVerilogString(V_Pin* In1, V_Pin* In2, V_Pin* Output, std::string inputOperation){
+
 std::string V_Component::buildVerilogString(){
 	int maxBitLength = 0;
 	int compOper = 0;
@@ -193,7 +201,8 @@ std::string V_Component::buildVerilogString(){
 		compOper = 3;
 	}
 	else{
-		cout << "Error Invalid Operator";
+		cout << "Error Invalid Operator" << endl;
+		exit(1);
 	}
 
 	if (component == "COMP"){
