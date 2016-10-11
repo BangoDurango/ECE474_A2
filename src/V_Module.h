@@ -12,6 +12,7 @@ File: V_Module.h
 #include<string>
 #include <vector>
 #include<iostream>
+#include <fstream>
 #include <sstream>
 #include "V_Pin.h"
 #include "Parser.h"
@@ -30,6 +31,8 @@ public:
 	void generateComponents();//For Luis - see end of V_Module.cpp
 	
 	std::vector<string>* getFileStringVector();
+
+	void generateVerilogFile(std::string outFileStr);
 	//V_Pin* getPinByName(std::string sName);
 
 private:
